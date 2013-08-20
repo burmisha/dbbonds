@@ -1,7 +1,7 @@
 require 'sinatra'
-require 'pg'
+# require 'pg'
 
-conn = PGConn.open(:dbname => 'd98ldghnhunfae')
+# conn = PGConn.open(:dbname => 'd98ldghnhunfae')
 # res = conn.exec('SELECT SUM(value) FROM numbers')
 # answer = res.getvalue(0, 0)
 
