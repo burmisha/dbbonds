@@ -22,10 +22,11 @@ public class Application extends Controller {
 			Connection connection = DriverManager.getConnection(dbUrl, username, password);
 
 			// http://alvinalexander.com/java/edu/pj/jdbc/jdbc0003
-				Statement stmt = connection.createStatement(); 
+			Statement stmt = connection.createStatement(); 
 			ResultSet rs = stmt.executeQuery("SELECT sum(value) FROM numbers;");
 
 			connection.close();
+			rs.next();
 			// http://www.javamex.com/tutorials/database/jdbc_result_set.shtml#.UhONtVlOWSo
 			return ok(index.render("Your new application is ready. Hey! " + rs.getString(1)));
         } catch (Exception e) {
