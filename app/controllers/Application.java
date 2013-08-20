@@ -29,7 +29,7 @@ public class Application extends Controller {
 			// http://www.javamex.com/tutorials/database/jdbc_result_set.shtml#.UhONtVlOWSo
 			return ok(index.render("Your new application is ready. Hey! " + rs.getString(1)));
         } catch (Exception e) {
-            return ok(index.render("Feeling bad! " + e.getMessage());
+            return ok(index.render("Feeling bad! " + e.getMessage()));
         }
     }
   
