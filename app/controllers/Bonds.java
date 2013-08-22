@@ -12,6 +12,6 @@ import views.*;
 public class Bonds extends Controller {
   
     public static Result list() {
-		return ok(bondslist.render(""));
+		return ok(bondslist.render(session("connected")));
     }  
 }

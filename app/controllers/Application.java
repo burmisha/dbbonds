@@ -28,6 +28,7 @@ public class Application extends Controller {
 			if (!(email.equals("burmisha@gmail.com") && password.equals("password"))) {
 	            return "Invalid email and password";
 	        } else {
+	        	session("connected", email);
 	        	return null;
 	    	}
 	    }    
