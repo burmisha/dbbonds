@@ -1,1 +1,8 @@
 run
+play clean-all
+clean
+run
+clear
+play clear-all
+clear-all
+help

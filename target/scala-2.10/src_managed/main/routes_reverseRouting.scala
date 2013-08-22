@@ -1,6 +1,6 @@
 // @SOURCE:D:/github/dbbonds/conf/routes
-// @HASH:7146bf5ffec26c2f847f18152bb46ae68389afe6
-// @DATE:Tue Aug 20 14:28:44 BST 2013
+// @HASH:5c761875477986ff04bc34a41f132f1b7d24983c
+// @DATE:Wed Aug 21 17:26:21 BST 2013
 
 import Routes.{prefix => _prefix, defaultPrefix => _defaultPrefix}
 import play.core._
@@ -13,30 +13,48 @@ import play.libs.F
 import Router.queryString
 
 
+// @LINE:12
+// @LINE:11
+// @LINE:10
 // @LINE:9
-// @LINE:6
 package controllers {
 
-// @LINE:6
-class ReverseApplication {
+// @LINE:12
+class ReverseBonds {
     
 
-// @LINE:6
-def index(): Call = {
-   Call("GET", _prefix)
+// @LINE:12
+def list(): Call = {
+   Call("GET", _prefix + { _defaultPrefix } + "bonds")
 }
                                                 
     
 }
                           
 
+// @LINE:11
+// @LINE:10
 // @LINE:9
-class ReverseAssets {
+class ReverseApplication {
     
 
+// @LINE:11
+def authenticate(): Call = {
+   Call("POST", _prefix + { _defaultPrefix } + "login")
+}
+                                                
+
+// @LINE:10
 // @LINE:9
-def at(file:String): Call = {
-   Call("GET", _prefix + { _defaultPrefix } + "assets/" + implicitly[PathBindable[String]].unbind("file", file))
+def login(): Call = {
+   () match {
+// @LINE:9
+case () if true => Call("GET", _prefix)
+                                                        
+// @LINE:10
+case () if true => Call("GET", _prefix + { _defaultPrefix } + "login")
+                                                        
+   }
 }
                                                 
     
@@ -46,20 +64,22 @@ def at(file:String): Call = {
                   
 
 
+// @LINE:12
+// @LINE:11
+// @LINE:10
 // @LINE:9
-// @LINE:6
 package controllers.javascript {
 
-// @LINE:6
-class ReverseApplication {
+// @LINE:12
+class ReverseBonds {
     
 
-// @LINE:6
-def index : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Application.index",
+// @LINE:12
+def list : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Bonds.list",
    """
       function() {
-      return _wA({method:"GET", url:"""" + _prefix + """"})
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "bonds"})
       }
    """
 )
@@ -68,16 +88,35 @@ def index : JavascriptReverseRoute = JavascriptReverseRoute(
 }
               
 
+// @LINE:11
+// @LINE:10
 // @LINE:9
-class ReverseAssets {
+class ReverseApplication {
     
 
-// @LINE:9
-def at : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Assets.at",
+// @LINE:11
+def authenticate : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Application.authenticate",
    """
-      function(file) {
-      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "assets/" + (""" + implicitly[PathBindable[String]].javascriptUnbind + """)("file", file)})
+      function() {
+      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "login"})
+      }
+   """
+)
+                        
+
+// @LINE:10
+// @LINE:9
+def login : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Application.login",
+   """
+      function() {
+      if (true) {
+      return _wA({method:"GET", url:"""" + _prefix + """"})
+      }
+      if (true) {
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "login"})
+      }
       }
    """
 )
@@ -89,30 +128,40 @@ def at : JavascriptReverseRoute = JavascriptReverseRoute(
         
 
 
+// @LINE:12
+// @LINE:11
+// @LINE:10
 // @LINE:9
-// @LINE:6
 package controllers.ref {
 
-// @LINE:6
-class ReverseApplication {
+// @LINE:12
+class ReverseBonds {
     
 
-// @LINE:6
-def index(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.index(), HandlerDef(this, "controllers.Application", "index", Seq(), "GET", """ Home page""", _prefix + """""")
+// @LINE:12
+def list(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Bonds.list(), HandlerDef(this, "controllers.Bonds", "list", Seq(), "GET", """""", _prefix + """bonds""")
 )
                       
     
 }
                           
 
+// @LINE:11
+// @LINE:10
 // @LINE:9
-class ReverseAssets {
+class ReverseApplication {
     
 
+// @LINE:11
+def authenticate(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Application.authenticate(), HandlerDef(this, "controllers.Application", "authenticate", Seq(), "POST", """""", _prefix + """login""")
+)
+                      
+
 // @LINE:9
-def at(path:String, file:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Assets.at(path, file), HandlerDef(this, "controllers.Assets", "at", Seq(classOf[String], classOf[String]), "GET", """ Map static resources from the /public folder to the /assets URL path""", _prefix + """assets/$file<.+>""")
+def login(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Application.login(), HandlerDef(this, "controllers.Application", "login", Seq(), "GET", """ Authentication""", _prefix + """""")
 )
                       
     

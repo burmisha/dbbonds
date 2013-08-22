@@ -32,13 +32,11 @@ Seq[Any](format.raw/*1.32*/("""
 
 <html>
     <head>
-        <title>"""),_display_(Seq[Any](/*7.17*/title)),format.raw/*7.22*/("""</title>
-        <link rel="stylesheet" media="screen" href=""""),_display_(Seq[Any](/*8.54*/routes/*8.60*/.Assets.at("stylesheets/main.css"))),format.raw/*8.94*/("""">
-        <link rel="shortcut icon" type="image/png" href=""""),_display_(Seq[Any](/*9.59*/routes/*9.65*/.Assets.at("images/favicon.png"))),format.raw/*9.97*/("""">
-        <script src=""""),_display_(Seq[Any](/*10.23*/routes/*10.29*/.Assets.at("javascripts/jquery-1.9.0.min.js"))),format.raw/*10.74*/("""" type="text/javascript"></script>
+        <title>rr</title>
+        
     </head>
     <body>
-        """),_display_(Seq[Any](/*13.10*/content)),format.raw/*13.17*/("""
+cc
     </body>
 </html>
 """))}
@@ -53,11 +51,11 @@ Seq[Any](format.raw/*1.32*/("""
 }
                 /*
                     -- GENERATED --
-                    DATE: Tue Aug 20 14:28:45 BST 2013
+                    DATE: Wed Aug 21 17:16:08 BST 2013
                     SOURCE: D:/github/dbbonds/app/views/main.scala.html
-                    HASH: 27f8edb770da492742673119002f624cb384b42b
-                    MATRIX: 727->1|834->31|922->84|948->89|1045->151|1059->157|1114->191|1210->252|1224->258|1277->290|1338->315|1353->321|1420->366|1523->433|1552->440
-                    LINES: 26->1|29->1|35->7|35->7|36->8|36->8|36->8|37->9|37->9|37->9|38->10|38->10|38->10|41->13|41->13
+                    HASH: 46c69f80e3dfefc3f39379616e002997f1a125e0
+                    MATRIX: 727->1|834->31
+                    LINES: 26->1|29->1
                     -- GENERATED --
                 */
             

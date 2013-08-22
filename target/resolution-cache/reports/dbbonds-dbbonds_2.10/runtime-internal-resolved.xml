@@ -7,8 +7,20 @@
 		revision="1.0-SNAPSHOT"
 		conf="runtime-internal"
 		confs="compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom"
-		date="20130820142832"/>
+		date="20130821171447"/>
 	<dependencies>
+		<module organisation="postgresql" name="postgresql">
+			<revision name="8.4-702.jdbc4" status="release" pubdate="20101004091834" resolver="public" artresolver="public" homepage="http://jdbc.postgresql.org" downloaded="false" searched="false" default="false" conf="default(compile), default, compile, runtime, master" position="59">
+				<license name="BSD License" url="http://jdbc.postgresql.org/license.html"/>
+				<metadata-artifact status="no" details="" size="2378" time="0" location="D:\Download\play-2.1.3\framework\.\..\repository\cache\postgresql\postgresql\ivy-8.4-702.jdbc4.xml" searched="false" origin-is-local="false" origin-location="http://repo1.maven.org/maven2/postgresql/postgresql/8.4-702.jdbc4/postgresql-8.4-702.jdbc4.pom"/>
+				<caller organisation="dbbonds" name="dbbonds_2.10" conf="optional, compile, runtime, runtime-internal" rev="8.4-702.jdbc4" rev-constraint-default="8.4-702.jdbc4" rev-constraint-dynamic="8.4-702.jdbc4" callerrev="1.0-SNAPSHOT"/>
+				<artifacts>
+					<artifact name="postgresql" type="jar" ext="jar" status="no" details="" size="539510" time="0" location="D:\Download\play-2.1.3\framework\.\..\repository\cache\postgresql\postgresql\jars\postgresql-8.4-702.jdbc4.jar">
+						<origin-location is-local="false" location="http://repo1.maven.org/maven2/postgresql/postgresql/8.4-702.jdbc4/postgresql-8.4-702.jdbc4.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
 		<module organisation="play" name="play-java-ebean_2.10">
 			<revision name="2.1.3" status="release" pubdate="20130806152633" resolver="local" artresolver="local" downloaded="false" searched="false" default="false" conf="default(compile), compile" position="53">
 				<metadata-artifact status="no" details="" size="2142" time="0" location="D:\Download\play-2.1.3\framework\.\..\repository\cache\play\play-java-ebean_2.10\ivy-2.1.3.xml" searched="false" origin-is-local="true" origin-location="D:\Download\play-2.1.3\repository\local\play\play-java-ebean_2.10\2.1.3\ivys\ivy.xml"/>

@@ -1,6 +1,6 @@
 // @SOURCE:D:/github/dbbonds/conf/routes
-// @HASH:7146bf5ffec26c2f847f18152bb46ae68389afe6
-// @DATE:Tue Aug 20 14:28:44 BST 2013
+// @HASH:5c761875477986ff04bc34a41f132f1b7d24983c
+// @DATE:Wed Aug 21 17:26:21 BST 2013
 
 
 import play.core._
@@ -28,14 +28,22 @@ def prefix = _prefix
 lazy val defaultPrefix = { if(Routes.prefix.endsWith("/")) "" else "/" } 
 
 
-// @LINE:6
-private[this] lazy val controllers_Application_index0 = Route("GET", PathPattern(List(StaticPart(Routes.prefix))))
+// @LINE:9
+private[this] lazy val controllers_Application_login0 = Route("GET", PathPattern(List(StaticPart(Routes.prefix))))
         
 
-// @LINE:9
-private[this] lazy val controllers_Assets_at1 = Route("GET", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("assets/"),DynamicPart("file", """.+""",false))))
+// @LINE:10
+private[this] lazy val controllers_Application_login1 = Route("GET", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("login"))))
         
-def documentation = List(("""GET""", prefix,"""controllers.Application.index()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """assets/$file<.+>""","""controllers.Assets.at(path:String = "/public", file:String)""")).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
+
+// @LINE:11
+private[this] lazy val controllers_Application_authenticate2 = Route("POST", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("login"))))
+        
+
+// @LINE:12
+private[this] lazy val controllers_Bonds_list3 = Route("GET", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("bonds"))))
+        
+def documentation = List(("""GET""", prefix,"""controllers.Application.login()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """login""","""controllers.Application.login()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """login""","""controllers.Application.authenticate()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """bonds""","""controllers.Bonds.list()""")).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
   case r @ (_,_,_) => s :+ r.asInstanceOf[(String,String,String)]
   case l => s ++ l.asInstanceOf[List[(String,String,String)]] 
 }}
@@ -43,18 +51,34 @@ def documentation = List(("""GET""", prefix,"""controllers.Application.index()""
     
 def routes:PartialFunction[RequestHeader,Handler] = {        
 
-// @LINE:6
-case controllers_Application_index0(params) => {
+// @LINE:9
+case controllers_Application_login0(params) => {
    call { 
-        invokeHandler(controllers.Application.index(), HandlerDef(this, "controllers.Application", "index", Nil,"GET", """ Home page""", Routes.prefix + """"""))
+        invokeHandler(controllers.Application.login(), HandlerDef(this, "controllers.Application", "login", Nil,"GET", """ Authentication""", Routes.prefix + """"""))
    }
 }
         
 
-// @LINE:9
-case controllers_Assets_at1(params) => {
-   call(Param[String]("path", Right("/public")), params.fromPath[String]("file", None)) { (path, file) =>
-        invokeHandler(controllers.Assets.at(path, file), HandlerDef(this, "controllers.Assets", "at", Seq(classOf[String], classOf[String]),"GET", """ Map static resources from the /public folder to the /assets URL path""", Routes.prefix + """assets/$file<.+>"""))
+// @LINE:10
+case controllers_Application_login1(params) => {
+   call { 
+        invokeHandler(controllers.Application.login(), HandlerDef(this, "controllers.Application", "login", Nil,"GET", """""", Routes.prefix + """login"""))
+   }
+}
+        
+
+// @LINE:11
+case controllers_Application_authenticate2(params) => {
+   call { 
+        invokeHandler(controllers.Application.authenticate(), HandlerDef(this, "controllers.Application", "authenticate", Nil,"POST", """""", Routes.prefix + """login"""))
+   }
+}
+        
+
+// @LINE:12
+case controllers_Bonds_list3(params) => {
+   call { 
+        invokeHandler(controllers.Bonds.list(), HandlerDef(this, "controllers.Bonds", "list", Nil,"GET", """""", Routes.prefix + """bonds"""))
    }
 }
         
