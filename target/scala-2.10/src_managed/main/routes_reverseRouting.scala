@@ -1,6 +1,6 @@
 // @SOURCE:D:/github/dbbonds/conf/routes
-// @HASH:5c761875477986ff04bc34a41f132f1b7d24983c
-// @DATE:Wed Aug 21 17:26:21 BST 2013
+// @HASH:9594a0055f473497bdc05f5ef9d134fd2f750ef4
+// @DATE:Fri Aug 23 17:15:49 BST 2013
 
 import Routes.{prefix => _prefix, defaultPrefix => _defaultPrefix}
 import play.core._
@@ -13,19 +13,27 @@ import play.libs.F
 import Router.queryString
 
 
-// @LINE:12
+// @LINE:15
+// @LINE:13
 // @LINE:11
 // @LINE:10
 // @LINE:9
 package controllers {
 
-// @LINE:12
-class ReverseBonds {
+// @LINE:15
+// @LINE:13
+class ReverseClients {
     
 
-// @LINE:12
+// @LINE:15
+def one(id:Int): Call = {
+   Call("GET", _prefix + { _defaultPrefix } + "client/" + implicitly[PathBindable[Int]].unbind("id", id))
+}
+                                                
+
+// @LINE:13
 def list(): Call = {
-   Call("GET", _prefix + { _defaultPrefix } + "bonds")
+   Call("GET", _prefix + { _defaultPrefix } + "clients")
 }
                                                 
     
@@ -64,22 +72,35 @@ case () if true => Call("GET", _prefix + { _defaultPrefix } + "login")
                   
 
 
-// @LINE:12
+// @LINE:15
+// @LINE:13
 // @LINE:11
 // @LINE:10
 // @LINE:9
 package controllers.javascript {
 
-// @LINE:12
-class ReverseBonds {
+// @LINE:15
+// @LINE:13
+class ReverseClients {
     
 
-// @LINE:12
+// @LINE:15
+def one : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Clients.one",
+   """
+      function(id) {
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "client/" + (""" + implicitly[PathBindable[Int]].javascriptUnbind + """)("id", id)})
+      }
+   """
+)
+                        
+
+// @LINE:13
 def list : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Bonds.list",
+   "controllers.Clients.list",
    """
       function() {
-      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "bonds"})
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "clients"})
       }
    """
 )
@@ -128,19 +149,27 @@ def login : JavascriptReverseRoute = JavascriptReverseRoute(
         
 
 
-// @LINE:12
+// @LINE:15
+// @LINE:13
 // @LINE:11
 // @LINE:10
 // @LINE:9
 package controllers.ref {
 
-// @LINE:12
-class ReverseBonds {
+// @LINE:15
+// @LINE:13
+class ReverseClients {
     
 
-// @LINE:12
+// @LINE:15
+def one(id:Int): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Clients.one(id), HandlerDef(this, "controllers.Clients", "one", Seq(classOf[Int]), "GET", """""", _prefix + """client/$id<[^/]+>""")
+)
+                      
+
+// @LINE:13
 def list(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Bonds.list(), HandlerDef(this, "controllers.Bonds", "list", Seq(), "GET", """""", _prefix + """bonds""")
+   controllers.Clients.list(), HandlerDef(this, "controllers.Clients", "list", Seq(), "GET", """ GET		/bonds						controllers.Bonds.list()""", _prefix + """clients""")
 )
                       
     

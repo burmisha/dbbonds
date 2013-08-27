@@ -8,10 +8,15 @@ import static play.data.Form.*;
 import views.html.*;
 import models.*;
 import views.*;
+import java.util.List;
 
 public class Bonds extends Controller {
-  
-    public static Result list() {
-		return ok(bondslist.render(session("connected")));
-    }  
+	// 	return ok(bondslist.render(session("connected")));
+	public static Result list(int clientId) {
+		// DataBaseHandler dbh = new DataBaseHandler();
+		// List<Bond> bl = dbh.getBonds(clientId);
+		// dbh.closeConnection();
+		// return ok(bondslist.render(bl));
+		return ok("");
+	}
 }

@@ -1,0 +1,10 @@
+@(currentPage: List[Client])
+	<table>
+		<tbody>
+			@for(client <- currentPage) {
+				<tr>
+				<td>@client.getName()</td>
+				</tr>
+			}
+		</tbody>
+	</table>
