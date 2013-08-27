@@ -1,8 +1,1 @@
-[info] Compiling 2 Scala sources and 1 Java source to D:\github\dbbonds\target\scala-2.10\classes...
-[warn] D:\github\dbbonds\conf\routes:10: unreachable code
-[warn] GET		/login						controllers.Application.login()
-[warn] one warning found
-[info] Compiling 3 Scala sources and 2 Java sources to D:\github\dbbonds\target\scala-2.10\classes...
-[warn] D:\github\dbbonds\conf\routes:10: unreachable code
-[warn] GET		/login						controllers.Application.login()
-[warn] one warning found
+[info] Compiling 2 Scala sources to D:\github\dbbonds\target\scala-2.10\classes...

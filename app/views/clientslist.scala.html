@@ -3,7 +3,7 @@
 		<tbody>
 			@for(client <- currentPage) {
 				<tr>
-				<td>@client.getName()</td>
+				<td><a href="@routes.Clients.one(client.getId())">@client.getName()</a></td>
 				</tr>
 			}
 		</tbody>
