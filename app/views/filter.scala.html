@@ -1,0 +1,21 @@
+@(bondList: List[Bond])
+
+<html>
+<head>
+	<title>DBBonds → Search results</title>
+</head>
+<body>
+	<table>
+		<tbody>
+			@for(bond <- bondList) {
+				<tr>
+				<td>@bond.getCusip()</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</body>
+</html>
+	
+
+

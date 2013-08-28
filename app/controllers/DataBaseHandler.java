@@ -6,13 +6,17 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+
+import java.util.Properties;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
-
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class DataBaseHandler {
 
@@ -65,7 +69,6 @@ public class DataBaseHandler {
 	public int getPortfolioId(int clientId){
 		try{
 			Statement stmt = conn.createStatement();
-			
 			String s = "SELECT id_portfolio FROM clients WHERE id = '" + clientId + "'";
 			ResultSet rs = stmt.executeQuery(s);
 			if (rs.next())
@@ -78,38 +81,63 @@ public class DataBaseHandler {
 		}
 	}
 
-
-	// public ArrayList<Bond> getBonds(){
-	// 	ArrayList<Bond> bonds = new ArrayList<Bond>();
-	// 	try{
-	// 		Statement stmt = conn.createStatement();
-	// 		String s = "SELECT * FROM bonds WHERE login = '" + login +
-	// 				"' and pwd ='" + pwd + "'";
-	// 		String s = "SELECT * FROM bonds";
-	// 		ResultSet rs = executeQuery(s);
-			
-	// 		while (rs.next()){
-	// 			Bond bond = new Bond();
-	// 			bond.setCusip(rs.getString(1));
-	// 			bond.setPrice(rs.getDouble(2));
-	// 			bond.setName(rs.getString(3));
-	// 			bond.setCoupon(rs.getDouble(4));
-	// 			bond.setCurrentYield(rs.getDouble(5));
-	// 			bond.setMaturityYield(rs.getDouble(6));
-	// 			bond.setQuantity(rs.getInt(7));
-	// 			bond.setIdSpRating(rs.getInt(8));
-	// 			bond.setIdMoodysRating(rs.getInt(9));
-	// 			bond.setMaturityDate(rs.getDate(10));
-	// 			bond.setIssuer(rs.getString(11));
-	// 			bonds.add(bond);
-	// 		}
-	// 	} catch (Exception e){
-	// 		e.printStackTrace();
-	// 	}
-
+public Map<Integer, String> getSpRating(){
+		Map<Integer, String> spRating = new HashMap<Integer, String>();
+		String s = "select * from idsprating";
+		ResultSet rs = executeQuery(s);
+		try{
+			while (rs.next()){
+				spRating.put(rs.getInt("id"), rs.getString("rating"));
+			}
+		} catch(Exception e){
+			e.printStackTrace();
+		}
 		
-	// 	return bonds;
-	// }
+		return spRating;
+	}
+	
+	public Map<Integer, String> getMoodysRating(){
+		Map<Integer, String> moodysRating = new HashMap<Integer, String>();
+		String s = "select * from idmoodysrating";
+		ResultSet rs = executeQuery(s);
+		try {
+			while (rs.next())
+				moodysRating.put(rs.getInt("id"), rs.getString("rating"));
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		return moodysRating;
+	}
+	
+	public int getMoodysIDFromString(String rating){
+		int id = 0;
+		String s = "SELECT id FROM idmoodysrating WHERE rating = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(s);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next())
+				id = rs.getInt("id");
+		} catch (Exception e){
+			e.printStackTrace();
+		}		
+		return id;
+	}
+	
+	public int getSpIDFromString(String rating){
+		int id = 0;
+		String s = "SELECT id FROM idsprating WHERE rating = ?";
+		try{
+			PreparedStatement pstmt = conn.prepareStatement(s);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()){
+				id = rs.getInt("id");
+			}
+		} catch (Exception e){
+			e.printStackTrace();
+		}		
+		return id;
+	}
+	
 
 	public ArrayList<Client> getClients(int traderId){
 		ArrayList<Client> clients = new ArrayList<Client>();
@@ -133,50 +161,6 @@ public class DataBaseHandler {
 		return clients;
 	}
 	
-	// public Map<Integer, String> getSpRating(){
-	// 	Map<Integer, String> spRating = new HashMap<Integer, String>();
-	// 	String s = "select * from idsprating";
-	// 	ResultSet rs = executeQuery(s);
-	// 	try{
-	// 		while (rs.next()){
-	// 			spRating.put(rs.getInt(1), rs.getString(2));
-	// 		}
-	// 	} catch(Exception e){
-	// 		e.printStackTrace();
-	// 	}
-		
-	// 	return spRating;
-	// }
-	
-	// public Map<Integer, String> getMoodysRating(){
-	// 	Map<Integer, String> moodysRating = new HashMap<Integer, String>();
-	// 	String s = "select * from idmoodysrating";
-		
-	// 	ResultSet rs = executeQuery(s);
-		
-	// 	try{
-	// 		while (rs.next()){
-	// 			moodysRating.put(rs.getInt(1), rs.getString(2));
-	// 		}
-	// 	} catch(Exception e){
-	// 		e.printStackTrace();
-	// 	}
-		
-	// 	return moodysRating;
-	// }
-	
-	// public boolean buyBond(Portfolio portfolio, Bond bond){
-	// 	int portfolioID = portfolio.getId();		
-	// 	String s = "UPDATE 	";
-		
-	// 	try{
-	// 		return true;
-	// 	} catch (Exception e){
-	// 		e.printStackTrace();
-	// 		return false;
-	// 	} 
-	// }
-
 	public Portfolio getPortfolio(int portfolioId){
 		Portfolio portfolio = new Portfolio();
 		List<Bond> bonds = new ArrayList<Bond>();
@@ -201,24 +185,18 @@ public class DataBaseHandler {
 		} catch (Exception e){
 			e.printStackTrace();
 		}
-		
 		portfolio.setId(portfolioId);
 		portfolio.setBonds(bonds);
 		portfolio.setQuantities(quantities);
-		
 		return portfolio;
 	}
 
 	public Bond getBondFromCUSIP(String cusip){
 		Bond bond = new Bond();
-		
 		try{
 			String s = "SELECT * FROM bonds WHERE cusip = ?";
-			
 			PreparedStatement pstmt = conn.prepareStatement(s);
-			
 			pstmt.setString(1, cusip);
-			
 			ResultSet rs =  pstmt.executeQuery();
 			if (rs.next()){
 				bond.setCusip(cusip);
@@ -249,4 +227,186 @@ public class DataBaseHandler {
 			return null;
 		}
 	}
+
+		public List<Bond> searchBonds(List<String> lBound, List<String> hBound){
+		List<Bond> bonds = new ArrayList<Bond>();
+		String s = "SELECT * FROM bonds WHERE 1=1";
+			
+			for (int i = 0; i < lBound.size(); ++i){
+				
+				switch (i) {
+					case 0:	if (!lBound.get(i).isEmpty())
+								s += " AND id_moodysrating <= ?";
+							if (!hBound.get(i).isEmpty())
+								s += " AND id_moodysrating >= ?";
+					
+							break;
+					case 1: if (!lBound.get(i).isEmpty())
+								s += " AND	 coupon >= ?";
+							if (!hBound.get(i).isEmpty())
+								s += " AND	 coupon <= ?";
+					
+							break;
+					case 2: if (!lBound.get(i).isEmpty())
+								s += " AND currentyield >= ?";
+							if (!hBound.get(i).isEmpty())
+								s += " AND currentyield <= ?";
+							
+							break;
+					case 3: if (!lBound.get(i).isEmpty())
+								s += " AND maturityyield >= ?";
+							if (!hBound.get(i).isEmpty())
+								s += " AND maturityyield <= ?";
+							
+							break;
+					case 4: if (!lBound.get(i).isEmpty())
+								s += " AND maturitydate >= ?";
+							if (!hBound.get(i).isEmpty())
+								s += " AND maturitydate <= ?";
+					
+							break;
+					case 5: if (!lBound.get(i).isEmpty())
+								s += " AND parvalue >= ?";
+							if (!hBound.get(i).isEmpty())
+								s += " AND parvalue <= ?";
+							break;
+					case 6: if (!lBound.get(i).isEmpty())
+								s += " AND price >= ?";
+							if (!hBound.get(i).isEmpty())
+								s += " AND price >= ?";
+					
+							break;
+				}
+			}
+			try{
+				PreparedStatement pstmt = conn.prepareStatement(s);
+				
+				int count = 1;
+				
+				for (int k = 0; k < lBound.size(); ++k){
+					switch (k) {
+						case 0:	if (!lBound.get(k).isEmpty()){
+									int lMoodysID = getMoodysIDFromString(lBound.get(k));
+									pstmt.setInt(count, lMoodysID);
+									++count;
+								}
+									
+								if (!hBound.get(k).isEmpty()){
+									int hMoodysID = getMoodysIDFromString(hBound.get(k));
+									pstmt.setInt(count, hMoodysID);
+									++count;
+								}
+						
+								break;
+						case 1: if (!lBound.get(k).isEmpty()){
+									int lCoupon = Integer.parseInt(lBound.get(k));
+									pstmt.setInt(count, lCoupon);
+									++count;
+								}
+								if (!hBound.get(k).isEmpty()){
+									int hCoupon = Integer.parseInt(hBound.get(k));
+									pstmt.setInt(count, hCoupon);
+									++count;
+								}
+						
+								break;
+						case 2: if (!lBound.get(k).isEmpty()){
+									double lCurrentYield = Double.parseDouble(lBound.get(k));
+									pstmt.setDouble(count, lCurrentYield);
+									++count;
+								}
+								if (!hBound.get(k).isEmpty()){
+									double hCurrentYield = Double.parseDouble(hBound.get(k));
+									pstmt.setDouble(count, hCurrentYield);
+									++count;
+								}
+								
+								break;
+						case 3: if (!lBound.get(k).isEmpty()){
+									double lMaturityYield = Double.parseDouble(lBound.get(k));
+									pstmt.setDouble(count, lMaturityYield);
+									++count;
+								}
+								if (!hBound.get(k).isEmpty()){
+									double hMaturityYield = Double.parseDouble(hBound.get(k));
+									pstmt.setDouble(count, hMaturityYield);
+									++count;
+								}
+								
+								break;
+						case 4: 
+								SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+								if (!lBound.get(k).isEmpty()){
+									Date lMaturityDate = dateFormat.parse(lBound.get(k));
+									java.sql.Date lsDate = new java.sql.Date(lMaturityDate.getTime());
+									pstmt.setDate(count, lsDate);
+									++count;
+									
+								}
+								if (!hBound.get(k).isEmpty()){
+									Date hMaturityDate = dateFormat.parse(hBound.get(k));
+									java.sql.Date hsDate = new java.sql.Date(hMaturityDate.getTime());
+									pstmt.setDate(count, hsDate);
+									++count;
+								}
+						
+								break;
+						case 5: 
+							if (!lBound.get(k).isEmpty()){
+								double lParValue = Double.parseDouble(lBound.get(k));
+								pstmt.setDouble(count, lParValue);
+								++count;
+								
+							}
+							if (!hBound.get(k).isEmpty()){
+								double hParValue = Double.parseDouble(hBound.get(k));
+								pstmt.setDouble(count, hParValue);
+								++count;
+								
+							}
+					
+							break;		
+								
+						case 6: if (!lBound.get(k).isEmpty()){
+									double lPrice = Double.parseDouble(lBound.get(k));
+									pstmt.setDouble(count, lPrice);
+									++count;
+								}
+								if (!hBound.get(k).isEmpty()){
+									double hPrice = Double.parseDouble(hBound.get(k));
+									pstmt.setDouble(count, hPrice);
+									++count;
+								}
+						
+								break;
+					}
+				}
+				
+				ResultSet rs = pstmt.executeQuery();
+				
+				while (rs.next()){
+					Bond bond = new Bond();
+					bond.setCusip(rs.getString("cusip"));
+					bond.setParValue(rs.getDouble("parvalue"));
+					bond.setPrice(rs.getDouble("price"));
+					bond.setName(rs.getString("name"));
+					bond.setCoupon(rs.getDouble("coupon"));
+					bond.setCurrentYield(rs.getDouble("currentyield"));
+					bond.setMaturityYield(rs.getDouble("maturityyield"));
+					bond.setQuantity(rs.getInt("quantity"));
+					bond.setIdSpRating(rs.getInt("id_sprating"));
+					bond.setIdMoodysRating(rs.getInt("id_moodysrating"));
+					bond.setMaturityDate(rs.getDate("maturitydate"));
+					bond.setIssuer(rs.getString("issuer"));
+					
+					bonds.add(bond);
+				}
+				
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+			// throw Exception("" + bonds.size());
+			return bonds;
+	}
+	
 }

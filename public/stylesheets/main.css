@@ -1,0 +1,70 @@
+/** {
+			margin: 0;
+			padding: 0;
+		}
+html {
+	width: 100%;
+	padding: 0pt;
+	.box-sizing;
+}
+
+body {
+	background-color: #ffffff;
+	font-family: arial;
+	font-size: 13pt;
+	line-height: 1.3;
+	margin: 40pt 10%;
+	width: 80%;
+	text-align: center;
+}
+
+tr:nth-child(even) {
+	clear: right;
+	background-color: #ffffff;
+}
+
+tr:hover{
+	background-color: #aaaadd;
+}
+
+table {
+    border-collapse: collapse;
+    padding: 0px;
+    margin: 0px;
+    border-spacing: 0px;
+    background-repeat: no-repeat;
+    border:ridge !important;
+    width:100%;
+
+}
+
+td, th {
+    background:transparent url(/microSite/img/dots.gif) repeat-x left bottom !important;
+    border: none!important;
+    padding: 8px 12px 8px 12px!important;
+    vertical-align:top
+}
+
+th {
+    font-weight:thick;
+    text-align:center;!important;
+}*/
+
+#signin {
+	float:center;
+	clear:both;
+	text-align:center;
+	align: center;
+	position: absolute;
+	width:30%;
+	top: 30%;
+	left: 35%
+}
+
+img.dblogo {
+	height:35pt;
+	padding-top: 5%;
+	float:right;
+	clear:both;
+}
+

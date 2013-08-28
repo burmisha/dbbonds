@@ -1,11 +1,11 @@
 @(portfolio: Portfolio)
-	<table class="computers zebra-striped">
-		<tbody>
-			@for((bond, quantity) <- portfolio.getBonds().zip(portfolio.getQuantities())) {
-				<tr>
-				<td>@bond.getCusip()</td>
-				<td>@quantity</td>
-				</tr>
-			}
-		</tbody>
-	</table>
+<table class="computers zebra-striped">
+	<tbody>
+		@for((bond, quantity) <- portfolio.getBonds().zip(portfolio.getQuantities())) {
+			<tr>
+			<td>@bond.getCusip()</td>
+			<td>@quantity</td>
+			</tr>
+		}
+	</tbody>
+</table>

@@ -7,3 +7,6 @@ play clear-all
 clear-all
 help
 run
+clear
+clean
+run

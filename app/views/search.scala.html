@@ -1,0 +1,52 @@
+@(form: Form[Application.Search])
+
+<html>
+<head>
+	<title>DBBonds → Search bonds</title>
+</head>
+<body>
+	@helper.form(routes.Application.filter) {
+		<p>
+		Rating:
+			low <input type = "text" name="lowRating" size = "2" align = right>
+			high <input type = "text" name="highRating" size = "2" align = right>
+		</p>
+		<p>
+		Coupon(%):
+			low <input type = "text" name="lowCoupon" size = "2" align = right>
+			high <input type = "text" name="highCoupon" size = "2" align = right>
+		</p>
+		<p>
+		Current Yield (%):
+			low <input type = "text" name="lowCurrentYield" size = "2" align = right>
+			high <input type = "text" name="highCurrentYield" size = "2" align = right>
+		</p>
+		<p>
+		Yield to Maturity (%):
+			low <input type = "text" name="lowMaturityYield" size = "2" align = right>
+			high <input type = "text" name="highMaturityYield" size = "2" align = right>
+		</p>
+		<p>
+		Maturity Date:
+			low <input type = "text" name="lowDate" size = "2" align = right>
+			high <input type = "text" name="highDate" size = "2" align = right>
+		</p>
+		<p>
+		Par Value($):
+			low <input type = "text" name="lowParValue" size = "2" align = right>
+			high <input type = "text" name="highParValue" size = "2" align = right>
+		</p>
+		<p>
+		Price($):
+			low <input type = "text" name="lowPrice" size = "2" align = right>
+			high <input type = "text" name="highPrice" size = "2" align = right>
+		</p>
+		<p align="right">
+			<button name = "search">Search</button>
+		</p>
+	}
+</body>
+</html>
+	
+
+

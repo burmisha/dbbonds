@@ -7,7 +7,7 @@
 		revision="1.0-SNAPSHOT"
 		conf="compile-internal"
 		confs="compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom"
-		date="20130821171447"/>
+		date="20130828120755"/>
 	<dependencies>
 		<module organisation="postgresql" name="postgresql">
 			<revision name="8.4-702.jdbc4" status="release" pubdate="20101004091834" resolver="public" artresolver="public" homepage="http://jdbc.postgresql.org" downloaded="false" searched="false" default="false" conf="default(compile), default, compile, runtime, master" position="59">

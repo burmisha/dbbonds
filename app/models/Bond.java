@@ -33,38 +33,30 @@ public class Bond extends Model{
 	// 	BBBp,	BBB,	BBBm,
 	// }
 	
-	@Id
 	private String cusip;
-	@Constraints.Required
+	private double parValue;
 	private double price;
-	// @Constraints.Required
 	private String name;
-	// @Constraints.Required
 	private double coupon;
-	// @Constraints.Required
 	private double currentYield;
-	// @Constraints.Required
 	private double maturityYield;
-	// @Constraints.Required
 	private int quantity;
-	// @Constraints.Required
 	private int idSpRating;
-	// @Constraints.Required
 	private int idMoodysRating;
-	// @Constraints.Required
 	private Date maturityDate;
-	// @Constraints.Required
 	private Date settlementDate;	
-	// @Constraints.Required
 	private ArrayList<Date> couponPaymentDates;
-	// @Constraints.Required
 	private String issuer;
-		
-	public Bond(String cusip, double price, String name, double coupon,
-			double currentYield, double maturityYield, int quantity,
-			int idSpRating, int idMoodysRating, Date maturityDate,
+	
+	
+	
+	
+	public Bond(String cusip, double parValue, double price, String name, 
+			double coupon, double currentYield, double maturityYield,
+			int quantity, int idSpRating, int idMoodysRating, Date maturityDate,
 			Date settlementDate, ArrayList<Date> couponPaymentDates) {
 		this.cusip = cusip;
+		this.parValue = parValue;
 		this.price = price;
 		this.name = name;
 		this.coupon = coupon;
@@ -80,6 +72,7 @@ public class Bond extends Model{
 	
 	public Bond() {
 		this.cusip = "";
+		this.parValue = 0;
 		this.price = 0;
 		this.name = "";
 		this.coupon = 0;
@@ -93,6 +86,63 @@ public class Bond extends Model{
 		this.couponPaymentDates = new ArrayList<Date>();
 	}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(coupon);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime
+				* result
+				+ ((couponPaymentDates == null) ? 0 : couponPaymentDates
+						.hashCode());
+		temp = Double.doubleToLongBits(currentYield);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((cusip == null) ? 0 : cusip.hashCode());
+		result = prime * result + idMoodysRating;
+		result = prime * result + idSpRating;
+		result = prime * result + ((issuer == null) ? 0 : issuer.hashCode());
+		result = prime * result
+				+ ((maturityDate == null) ? 0 : maturityDate.hashCode());
+		temp = Double.doubleToLongBits(maturityYield);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		temp = Double.doubleToLongBits(price);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + quantity;
+		result = prime * result
+				+ ((settlementDate == null) ? 0 : settlementDate.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Bond other = (Bond) obj;
+
+		if (cusip == null) {
+			if (other.cusip != null)
+				return false;
+		} else if (!cusip.equals(other.cusip))
+			return false;
+		
+		return true;
+	}
+	
+	public double getParValue() {
+		return parValue;
+	}
+
+	public void setParValue(double parValue) {
+		this.parValue = parValue;
+	}
+
 	public String getCusip() {
 		return cusip;
 	}
@@ -176,24 +226,14 @@ public class Bond extends Model{
 
 	@Override
 	public String toString() {
-		return "Bond [cusip=" + cusip + ", price=" + price + ", name=" + name
-				+ ", coupon=" + coupon + ", currentYield=" + currentYield
-				+ ", maturityYield=" + maturityYield + ", quantity=" + quantity
-				+ ", idSpRating=" + idSpRating + ", moodysRating=" + idMoodysRating
+		return "Bond [cusip=" + cusip + ", parValue=" + parValue + ", price="
+				+ price + ", name=" + name + ", coupon=" + coupon
+				+ ", currentYield=" + currentYield + ", maturityYield="
+				+ maturityYield + ", quantity=" + quantity + ", idSpRating="
+				+ idSpRating + ", idMoodysRating=" + idMoodysRating
 				+ ", maturityDate=" + maturityDate + ", settlementDate="
 				+ settlementDate + ", couponPaymentDates=" + couponPaymentDates
 				+ ", issuer=" + issuer + "]";
-	}
-	public static Finder<String,Bond> find = new Finder<String,Bond>(String.class, Bond.class); 
-	
-	public static Page<Bond> page(int page, int pageSize, 
-									  String sortBy, String order, String filter) {
-		return 
-			find.where()
-				.ilike("name", "%" + filter + "%")
-				.orderBy(sortBy + " " + order)
-				.findPagingList(pageSize)
-				.getPage(page);
 	}
 }
 
