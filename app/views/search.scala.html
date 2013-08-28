@@ -1,50 +1,64 @@
 @(form: Form[Application.Search])
 
-<html>
+<!DOCTYPE html>
+<html lang="en-US">
 <head>
-	<title>DBBonds → Search bonds</title>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width; initial-scale=1.0">
+	<title>DBBonds</title>
+	<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+	<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
 </head>
 <body>
+<div class="search">
 	@helper.form(routes.Application.filter) {
-		<p>
-		Rating:
-			low <input type = "text" name="lowRating" size = "2" align = right>
-			high <input type = "text" name="highRating" size = "2" align = right>
-		</p>
-		<p>
-		Coupon(%):
-			low <input type = "text" name="lowCoupon" size = "2" align = right>
-			high <input type = "text" name="highCoupon" size = "2" align = right>
-		</p>
-		<p>
-		Current Yield (%):
-			low <input type = "text" name="lowCurrentYield" size = "2" align = right>
-			high <input type = "text" name="highCurrentYield" size = "2" align = right>
-		</p>
-		<p>
-		Yield to Maturity (%):
-			low <input type = "text" name="lowMaturityYield" size = "2" align = right>
-			high <input type = "text" name="highMaturityYield" size = "2" align = right>
-		</p>
-		<p>
-		Maturity Date:
-			low <input type = "text" name="lowDate" size = "2" align = right>
-			high <input type = "text" name="highDate" size = "2" align = right>
-		</p>
-		<p>
-		Par Value($):
-			low <input type = "text" name="lowParValue" size = "2" align = right>
-			high <input type = "text" name="highParValue" size = "2" align = right>
-		</p>
-		<p>
-		Price($):
-			low <input type = "text" name="lowPrice" size = "2" align = right>
-			high <input type = "text" name="highPrice" size = "2" align = right>
-		</p>
-		<p align="right">
-			<button name = "search">Search</button>
+	<table class="table table-hover table-condensed search">
+	<thead>
+		<tr><td></td><td>Low</td><td>High</td></td>
+	</thead>
+	<tbody>
+		<tr>
+			<td valign="middle">Rating:</td>
+			<td><input type = "text" name="lowRating" class="search form-control col-lg-2"></td>
+			<td><input type = "text" name="highRating" class="search form-control"></td>
+		</tr>
+		<tr>
+			<td>Coupon(%):</td>
+			<td><input type = "text" name="lowCoupon" class="search form-control"></td>
+			<td> <input type = "text" name="highCoupon" class="search form-control"></td>
+		</tr>
+		<tr>
+			<td>Current Yield (%):</td>
+			<td><input type = "text" name="lowCurrentYield" class="search form-control"></td>
+			<td> <input type = "text" name="highCurrentYield" class="search form-control"></td>
+		</tr>
+		<tr>
+			<td>Yield to Maturity (%):</td>
+			<td><input type = "text" name="lowMaturityYield" class="search form-control"></td>
+			<td> <input type = "text" name="highMaturityYield" class="search form-control"></td>
+		</tr>
+		<tr>
+			<td>Maturity Date:</td>
+			<td><input type = "text" name="lowDate" class="search form-control"></td>
+			<td> <input type = "text" name="highDate" class="search form-control"></td>
+		</tr>
+		<tr>
+			<td>Par Value($):</td>
+			<td><input type = "text" name="lowParValue" class="search form-control"></td>
+			<td> <input type = "text" name="highParValue" class="search form-control"></td>
+		</tr>
+		<tr>
+			<td>Price($):</td>
+			<td><input type = "text" name="lowPrice" class="search form-control"></td>
+			<td> <input type = "text" name="highPrice" class="search form-control"></td>
+		</tr>
+		</tbody>
+		</table>
+		<p align="center">
+			<button type="submit" class="btn btn-primary" name = "search">Search</button>
 		</p>
 	}
+	</div>
 </body>
 </html>
 	

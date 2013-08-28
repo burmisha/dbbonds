@@ -345,7 +345,66 @@ public Map<Integer, String> getSpRating(){
 		}
 	}
 
-		public List<Bond> searchBonds(List<String> lBound, List<String> hBound){
+	public boolean sellBond(Trader trader, Portfolio portfolio, Bond bond, int amount){
+		Client client = getClientFromPortfolio(portfolio.getId());
+		
+		int index = portfolio.getBonds().indexOf(bond);
+		int quantity = portfolio.getQuantities().get(index);
+		
+		
+		double moneyAmount = amount * bond.getPrice();
+
+		try {
+			conn.setAutoCommit(false);
+			if (quantity == amount){
+				String deleteBond = "DELETE FROM portfolios WHERE cusip_bond = ?;";
+				
+				PreparedStatement pstmt = conn.prepareStatement(deleteBond);
+				
+				pstmt.setString(1, bond.getCusip());
+				
+				pstmt.executeUpdate();
+			}
+			else{
+				String updatePortfolio = "UPDATE portfolios " + 
+						"SET quantity = quantity - ? WHERE cusip_bond = ?;";
+				
+				PreparedStatement pstmt = conn.prepareStatement(updatePortfolio);
+				
+				pstmt.setInt(1, amount);
+				pstmt.setString(2, bond.getCusip());
+
+				pstmt.executeUpdate();
+			}
+			
+			String updateClient = "UPDATE clients SET balance = balance + ? " +
+					"WHERE id = ?;";
+			
+			PreparedStatement pstmt = conn.prepareStatement(updateClient);
+			
+			pstmt.setDouble(1, moneyAmount);
+			pstmt.setInt(2, client.getId());
+			
+			pstmt.executeUpdate();
+			
+			LogRecord log = new LogRecord(portfolio, trader, bond, amount, "sell");
+			
+			writeLog(log);
+
+			conn.commit();
+			conn.setAutoCommit(true);
+			
+			return true;
+			
+			
+		} catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	
+	public List<Bond> searchBonds(List<String> lBound, List<String> hBound){
 		List<Bond> bonds = new ArrayList<Bond>();
 		String s = "SELECT * FROM bonds WHERE 1=1";
 			
@@ -359,9 +418,9 @@ public Map<Integer, String> getSpRating(){
 					
 							break;
 					case 1: if (!lBound.get(i).isEmpty())
-								s += " AND	coupon >= ?";
+								s += " AND 	coupon >= ?";
 							if (!hBound.get(i).isEmpty())
-								s += " AND	coupon <= ?";
+								s += " AND 	coupon <= ?";
 					
 							break;
 					case 2: if (!lBound.get(i).isEmpty())
@@ -386,6 +445,7 @@ public Map<Integer, String> getSpRating(){
 								s += " AND parvalue >= ?";
 							if (!hBound.get(i).isEmpty())
 								s += " AND parvalue <= ?";
+							
 							break;
 					case 6: if (!lBound.get(i).isEmpty())
 								s += " AND price >= ?";
@@ -396,6 +456,7 @@ public Map<Integer, String> getSpRating(){
 				}
 			}
 			try{
+				System.out.println(s);
 				PreparedStatement pstmt = conn.prepareStatement(s);
 				
 				int count = 1;
@@ -515,15 +576,37 @@ public Map<Integer, String> getSpRating(){
 					bond.setIdMoodysRating(rs.getInt("id_moodysrating"));
 					bond.setMaturityDate(rs.getDate("maturitydate"));
 					bond.setIssuer(rs.getString("issuer"));
-					
 					bonds.add(bond);
 				}
-				
 			} catch (Exception e){
 				e.printStackTrace();
 			}
-			// throw Exception("" + bonds.size());
 			return bonds;
+	}
+		
+public boolean writeLog(LogRecord logrecord){
+		String s = "INSERT INTO log(id_portfolio, id_trader, cusip, price, quantity, datetime, type) " +
+				"VALUES (?, ?, ?, ?, ?, ?, ?)";
+		
+		try{
+			PreparedStatement pstmt = conn.prepareStatement(s);
+			
+			pstmt.setInt(1, logrecord.getPortfolioId());
+			pstmt.setInt(2, logrecord.getTraderID());
+			pstmt.setString(3, logrecord.getCusip());
+			pstmt.setDouble(4, logrecord.getPrice());
+			pstmt.setInt(5, logrecord.getQuantity());
+			pstmt.setTimestamp(6, logrecord.getTMSP());
+			pstmt.setString(7, logrecord.getType());
+
+			pstmt.executeUpdate();
+
+			return true;
+			
+		} catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	public boolean buyBond(Trader trader, Portfolio portfolio, Bond bond, int amount){

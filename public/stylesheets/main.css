@@ -68,3 +68,11 @@ img.dblogo {
 	/*clear:both;*/
 }
 
+div.search {
+	width: auto;
+	max-width: 400pt;
+	position: absolute;
+	width:	40%;
+	top: 	15%;
+	left: 	30%
+}

@@ -84,6 +84,7 @@ public class Application extends Controller {
 			DataBaseHandler dbh = new DataBaseHandler();
 			List<Bond> SERP = dbh.searchBonds(lBound, hBound);
 			dbh.closeConnection();
+			// return ok("ok"+searchForm.field("highCoupon").value());
 			return ok(filter.render(SERP));
 		}
 	}
