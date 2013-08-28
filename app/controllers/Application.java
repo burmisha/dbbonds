@@ -46,31 +46,10 @@ public class Application extends Controller {
 						lowDate, 			highDate, 					
 						lowParValue, 		highParValue, 
 						lowPrice, 			highPrice;
-		// public List<Bond> execute() {
-		// 	DataBaseHandler dbh = new DataBaseHandler();
-		// 	List<String> lBound = new ArrayList<String>();
-		// 	lBound.add("highRating);
-		// 	lBound.add("highCoupon);
-		// 	lBound.add("highCurrentYield);
-		// 	lBound.add("highMaturityYield);
-		// 	lBound.add("highDate);
-		// 	lBound.add("highParValue);
-		// 	lBound.add("highPrice);
-		// 	List<String> hBound = new ArrayList<String>();
-		// 	hBound.add("highRating);
-		// 	hBound.add("highCoupon);
-		// 	hBound.add("highCurrentYield);
-		// 	hBound.add("highMaturityYield);
-		// 	hBound.add("highDate);
-		// 	hBound.add("highParValue);
-		// 	hBound.add("highPrice);
-		// 	List<Bond> bondsList = dbh.searchBonds(lBound, hBound);
-		// 	dbh.closeConnection();
-		// 	return bondsList;
-		// }
-		// public String validate() {
-		// 	return null;
-		// }
+	}
+
+	public static class Buy {
+		public String  amount;
 	}
 
 	public static Result login() { // Login page
@@ -105,10 +84,7 @@ public class Application extends Controller {
 			DataBaseHandler dbh = new DataBaseHandler();
 			List<Bond> SERP = dbh.searchBonds(lBound, hBound);
 			dbh.closeConnection();
-
-			// return ok("" + SERP.size());
 			return ok(filter.render(SERP));
-			// return ok("SERP");
 		}
 	}
 	
@@ -119,6 +95,38 @@ public class Application extends Controller {
 		} else {
 			return redirect(controllers.routes.Clients.list());
 		}
+	}
+
+	public static Result buy(int clientId, String cusip) {
+		Form<Buy> buyForm = form(Buy.class).bindFromRequest();
+		if (buyForm.hasErrors()) {
+			return badRequest("bad"); 
+		} else {
+			int amount = Integer.parseInt(buyForm.field("amount").value());
+			//int amount = 0;
+			DataBaseHandler dbh = new DataBaseHandler();
+			Trader trader 		= dbh.getTrader(Integer.parseInt(session("traderId")));
+			Client client 		= dbh.getClientFromID(clientId);
+			Portfolio portfolio = dbh.getPortfolioFromClient(client);
+			Bond bond 			= dbh.getBondFromCUSIP(cusip);
+			boolean passed 		= dbh.buyBond(trader, portfolio, bond, amount);
+			dbh.closeConnection();
+			if (passed) {
+				return redirect(controllers.routes.Clients.one(clientId));
+			} else {
+				return ok("not passed");
+			}
+		}
+	}
+
+	public static Result buyInfo(int clientId, String cusip) {
+			DataBaseHandler dbh = new DataBaseHandler();
+			// Trader trader 		= dbh.getTrader(Integer.parseInt(session("traderId")));
+			// Client client 		= dbh.getClientFromID(clientId);
+			// Portfolio portfolio = dbh.getPortfolioFromClient(client);
+			Bond bond 			= dbh.getBondFromCUSIP(cusip);
+			dbh.closeConnection();
+			return ok(buyinfo.render(clientId, cusip, bond));
 	}
  
 }

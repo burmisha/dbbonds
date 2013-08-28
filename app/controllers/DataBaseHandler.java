@@ -23,17 +23,17 @@ public class DataBaseHandler {
 	Connection conn;
 	public DataBaseHandler(){
 		String user = "cymuzpcvvjplbh";
-        String password = "yZYqsfq3BNCoQJL382QQC_rchL";
+		String password = "yZYqsfq3BNCoQJL382QQC_rchL";
 
-        try{
-        	String url = "jdbc:postgresql://ec2-54-221-229-7.compute-1.amazonaws.com:5432/d98ldghnhunfae";
-        	Properties props = new Properties();
-        	props.setProperty("user", 		user);
-        	props.setProperty("password", 	password);
-        	props.setProperty("ssl", 		"true");
-        	props.setProperty("sslfactory", "org.postgresql.ssl.NonValidatingFactory");
-        	conn = DriverManager.getConnection(url, props);
-        } catch (Exception e) {
+		try{
+			String url = "jdbc:postgresql://ec2-54-221-229-7.compute-1.amazonaws.com:5432/d98ldghnhunfae";
+			Properties props = new Properties();
+			props.setProperty("user", 		user);
+			props.setProperty("password", 	password);
+			props.setProperty("ssl", 		"true");
+			props.setProperty("sslfactory", "org.postgresql.ssl.NonValidatingFactory");
+			conn = DriverManager.getConnection(url, props);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -80,6 +80,123 @@ public class DataBaseHandler {
 			return -1;
 		}
 	}
+
+	public Client getClientFromPortfolio(int portfolioID){
+		Client client = new Client();
+		
+		try{
+			String s = "SELECT * FROM clients WHERE id_portfolio = ?";
+		
+			PreparedStatement pstmt = conn.prepareStatement(s);
+			
+			pstmt.setInt(1, portfolioID);
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			if (rs.next()){
+				client.setId(rs.getInt("id"));
+				client.setName(rs.getString("name"));
+				client.setIdTrader(rs.getInt("id_trader"));
+				client.setIdPortfolio(rs.getInt("id_portfolio"));
+				client.setBalance(rs.getDouble("balance"));
+			}
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		return client;
+	}
+
+	public boolean isBondExistInPortfolio(Portfolio portfolio, Bond bond){
+		int portfolioID = portfolio.getId();
+		String cusip = bond.getCusip();
+		
+		String s = "SELECT id FROM portfolios WHERE id = ? AND cusip_bond = ?";
+		
+		try{
+			PreparedStatement pstmt = conn.prepareStatement(s);
+			
+			pstmt.setInt(1, portfolioID);
+			pstmt.setString(2, cusip);
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			if (rs.next())
+				return true;
+			else
+				return false;
+		} catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+	public List<Client> getClientsFromTrader(Trader trader){
+		
+		List<Client> clients = new ArrayList<Client>();
+		int idTrader = trader.getId();
+		
+		String s = "SELECT * FROM clients WHERE id_trader = ? ORDER BY name";
+		
+		try{
+			PreparedStatement pstmt = conn.prepareStatement(s);
+			
+			pstmt.setInt(1, idTrader);
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			while (rs.next()){
+				Client client = new Client();
+				client.setId(rs.getInt("id"));
+				client.setName(rs.getString("name"));
+				client.setIdTrader(rs.getInt("id_trader"));
+				client.setIdPortfolio(rs.getInt("id_portfolio"));
+				client.setBalance(rs.getDouble("balance"));
+				
+				clients.add(client);
+			}
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		return clients;
+	}
+	
+
+	public Portfolio getPortfolioFromClient(Client client){
+		Portfolio portfolio = new Portfolio();
+		int portfolioID = client.getIdPortfolio();
+		List<Bond> bonds = new ArrayList<Bond>();
+		List<Integer> quantities = new ArrayList<Integer>();
+		
+		try{
+			String s = "SELECT cusip_bond, quantity FROM portfolios WHERE id = ?" +
+					"ORDER BY cusip_bond";
+			
+			PreparedStatement pstmt = conn.prepareStatement(s);
+			
+			pstmt.setInt(1, portfolioID);
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			while (rs.next()){
+				String cusip = rs.getString("cusip_bond");
+				int quantity = rs.getInt("quantity");
+				
+				Bond bond = getBondFromCUSIP(cusip);
+				bonds.add(bond);
+				quantities.add(quantity);
+			}			
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		
+		portfolio.setId(portfolioID);
+		portfolio.setBonds(bonds);
+		portfolio.setQuantities(quantities);
+		
+		return portfolio;
+		
+	}
+	
 
 public Map<Integer, String> getSpRating(){
 		Map<Integer, String> spRating = new HashMap<Integer, String>();
@@ -197,7 +314,7 @@ public Map<Integer, String> getSpRating(){
 			String s = "SELECT * FROM bonds WHERE cusip = ?";
 			PreparedStatement pstmt = conn.prepareStatement(s);
 			pstmt.setString(1, cusip);
-			ResultSet rs =  pstmt.executeQuery();
+			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()){
 				bond.setCusip(cusip);
 				bond.setPrice(rs.getDouble("price"));
@@ -242,9 +359,9 @@ public Map<Integer, String> getSpRating(){
 					
 							break;
 					case 1: if (!lBound.get(i).isEmpty())
-								s += " AND	 coupon >= ?";
+								s += " AND	coupon >= ?";
 							if (!hBound.get(i).isEmpty())
-								s += " AND	 coupon <= ?";
+								s += " AND	coupon <= ?";
 					
 							break;
 					case 2: if (!lBound.get(i).isEmpty())
@@ -408,5 +525,139 @@ public Map<Integer, String> getSpRating(){
 			// throw Exception("" + bonds.size());
 			return bonds;
 	}
-	
+
+	public boolean buyBond(Trader trader, Portfolio portfolio, Bond bond, int amount){
+			
+		int portfolioID = portfolio.getId();
+		String cusip = bond.getCusip();
+		double price = bond.getPrice() * amount;
+		int clientID = getClientFromPortfolio(portfolioID).getId();
+		
+		try{
+			conn.setAutoCommit(false);
+			
+			if (isBondExistInPortfolio(portfolio, bond))
+			{	
+				String updatePortfolios = "UPDATE portfolios SET quantity = quantity + ?" +
+						"WHERE id = ? AND cusip_bond = ?;";
+				
+				PreparedStatement portfolioPstmt = conn.prepareStatement(updatePortfolios);
+					
+				portfolioPstmt.setInt(1, amount);
+				portfolioPstmt.setInt(2, portfolioID);
+				portfolioPstmt.setString(3, cusip);
+				
+				portfolioPstmt.executeUpdate();
+				
+				String updateBonds = "UPDATE bonds SET quantity = quantity - ? WHERE cusip = ?";
+				
+				PreparedStatement bondPstmt = conn.prepareStatement(updateBonds);
+				
+				bondPstmt.setInt(1, amount);
+				bondPstmt.setString(2, cusip);
+				
+				bondPstmt.executeUpdate();
+				
+				String updateClients = "UPDATE clients SET balance = balance - ? WHERE id = ?";
+				
+				PreparedStatement clientPstmt = conn.prepareStatement(updateClients);
+				
+				clientPstmt.setDouble(1, price);
+				clientPstmt.setInt(2, clientID);
+				
+				clientPstmt.executeUpdate();
+				
+				// LogRecord log = new LogRecord(portfolio, trader, bond, amount, "buy");
+				
+				// writeLog(log);
+				
+				conn.commit();
+				
+				conn.setAutoCommit(true);
+					
+				return true;
+			}
+			else{
+				String insertPortfolios = "INSERT INTO portfolios VALUES(?, ?, ?);";
+				
+				PreparedStatement portfolioPstmt = conn.prepareStatement(insertPortfolios);
+					
+				portfolioPstmt.setInt(1, portfolioID);
+				portfolioPstmt.setString(2, cusip);
+				portfolioPstmt.setInt(3, amount);
+				
+				portfolioPstmt.executeUpdate();
+				
+				String updateBonds = "UPDATE bonds SET quantity = quantity - ? WHERE cusip = ?";
+				
+				PreparedStatement bondPstmt = conn.prepareStatement(updateBonds);
+				
+				bondPstmt.setInt(1, amount);
+				bondPstmt.setString(2, cusip);
+				
+				bondPstmt.executeUpdate();
+				
+				String updateClients = "UPDATE clients SET balance = balance - ? WHERE id = ?";
+				
+				PreparedStatement clientPstmt = conn.prepareStatement(updateClients);
+				
+				clientPstmt.setDouble(1, price);
+				clientPstmt.setInt(2, clientID);
+				
+				clientPstmt.executeUpdate();
+				
+				// LogRecord log = new LogRecord(portfolio, trader, bond, amount, "buy");
+				
+				// writeLog(log);
+				
+				conn.commit();
+				
+				conn.setAutoCommit(true);
+				
+				return true;
+			} 
+		} catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}		
+	}
+
+	public Trader getTrader(int traderID){
+		Trader trader = new Trader();
+		trader.setId(traderID);
+		String s = "SELECT fullname FROM traders WHERE id = ?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(s);
+			pstmt.setInt(1, traderID);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				trader.setName(rs.getString("fullname"));
+			}
+			trader.setClients(getClientsFromTrader(trader));
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		return trader;	
+	}
+
+	public Client getClientFromID(int id){
+		Client client = new Client();
+		try{
+			String s = "SELECT * FROM clients WHERE id = ?";
+			PreparedStatement pstmt = conn.prepareStatement(s);
+			pstmt.setInt(1, id);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()){
+				client.setId(rs.getInt("id"));
+				client.setName(rs.getString("name"));
+				client.setIdTrader(rs.getInt("id_trader"));
+				client.setIdPortfolio(rs.getInt("id_portfolio"));
+				client.setBalance(rs.getDouble("balance"));
+			}
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		return client;
+	}
+
 }

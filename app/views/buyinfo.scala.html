@@ -1,0 +1,33 @@
+@(clientId:Int, cusip:String, bond: Bond)
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width; initial-scale=1.0">
+	<title>DBBonds → Buy bonds</title>
+	<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/main.css")"> 
+	<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+</head>
+<body>
+	<table class="table">
+		<tbody>
+		<tr><td>CUSIP:</td>	<td>@bond.getCusip()</td></tr>
+		<tr><td>Name:</td>	<td>@bond.getName()</td></tr>
+		<tr><td>Par Value:</td>	<td>@bond.getParValue()</td></tr>
+		</tbody>
+	<table>
+
+	@helper.form(routes.Application.buy(clientId, cusip)) {
+		<p>
+			Amount: <input type = "text" name="amount" default="0">
+		</p>
+		<p align="right">
+			<button name = "search" type="submit">Buy bonds</button>
+		</p>
+	}
+</body>
+</html>
+	
+
+
