@@ -128,5 +128,12 @@ public class Application extends Controller {
 			dbh.closeConnection();
 			return ok(buyinfo.render(clientId, cusip, bond));
 	}
+
+	public static Result buy2portfolio(int portfolioId, String cusip) {
+			DataBaseHandler dbh = new DataBaseHandler();
+			int clientId = dbh.getClientFromPortfolio(portfolioId).getId();
+			dbh.closeConnection();
+			return redirect(controllers.routes.Application.buyInfo(clientId, cusip));
+	}
  
 }

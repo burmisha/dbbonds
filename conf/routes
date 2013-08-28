@@ -19,5 +19,7 @@ POST	/search 					controllers.Application.filter()
 GET 	/buy/:clientId/:bondId		controllers.Application.buyInfo(clientId:Int, bondId:String)
 POST 	/buy/:clientId/:bondId		controllers.Application.buy(clientId:Int, bondId:String)
 
+GET  	/buy2port/:portfolioId/:bondId		controllers.Application.buy2portfolio(portfolioId:Int, bondId:String)
+
 # Map static resources from the /public folder to the /assets URL path
 GET	/assets/*file				controllers.Assets.at(path="/public", file)
