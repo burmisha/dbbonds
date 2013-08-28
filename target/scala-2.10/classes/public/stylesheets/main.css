@@ -62,9 +62,9 @@ th {
 }
 
 img.dblogo {
-	height:35pt;
-	padding-top: 5%;
+	height: 40pt;
+	padding: 10pt;
 	float:right;
-	clear:both;
+	/*clear:both;*/
 }
 

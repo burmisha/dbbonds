@@ -1,27 +1,30 @@
 @(form: Form[Application.Login])
 
-<html>
+<!DOCTYPE html>
+<html lang="en-US">
 <head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width; initial-scale=1.0">
 	<title>DBBonds</title>
+	<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+	<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+	
 </head>
+
 <body>
+<img src="@routes.Assets.at("images/db_right.jpg")" class="dblogo">
+<div id="signin">
 	@helper.form(routes.Application.authenticate) {
-		<h1>Sign in</h1>
 		<p>
-			<input type="email" name="email" placeholder="Email">
+			<input type="email" name="email" placeholder="Email address" class="form-control">
 		</p>
 		<p>
-			<input type="password" name="password" placeholder="Password">
+			<input type="password" name="password" placeholder="Password" class="form-control">
 		</p>
 		<p>
-			<button type="submit">Login</button>
+			<button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
 		</p>
 	}
-	<p class="note">
-		Try <em>burmisha@@gmail.com</em> with <em>password</em> as password.
-    </p>
+</div>
 </body>
 </html>
-	
-
-

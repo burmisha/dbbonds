@@ -1,6 +1,6 @@
 // @SOURCE:D:/github/dbbonds/conf/routes
-// @HASH:9ea884e1794f41b47a57734307d0d85b4e9de6cf
-// @DATE:Wed Aug 28 12:08:18 BST 2013
+// @HASH:36715262aa3a17a455430174a57f121c56dda168
+// @DATE:Wed Aug 28 14:34:07 BST 2013
 
 import Routes.{prefix => _prefix, defaultPrefix => _defaultPrefix}
 import play.core._
@@ -13,6 +13,7 @@ import play.libs.F
 import Router.queryString
 
 
+// @LINE:20
 // @LINE:16
 // @LINE:15
 // @LINE:13
@@ -84,10 +85,24 @@ case () if true => Call("GET", _prefix + { _defaultPrefix } + "login")
     
 }
                           
+
+// @LINE:20
+class ReverseAssets {
+    
+
+// @LINE:20
+def at(file:String): Call = {
+   Call("GET", _prefix + { _defaultPrefix } + "assets/" + implicitly[PathBindable[String]].unbind("file", file))
+}
+                                                
+    
+}
+                          
 }
                   
 
 
+// @LINE:20
 // @LINE:16
 // @LINE:15
 // @LINE:13
@@ -187,10 +202,29 @@ def login : JavascriptReverseRoute = JavascriptReverseRoute(
     
 }
               
+
+// @LINE:20
+class ReverseAssets {
+    
+
+// @LINE:20
+def at : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Assets.at",
+   """
+      function(file) {
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "assets/" + (""" + implicitly[PathBindable[String]].javascriptUnbind + """)("file", file)})
+      }
+   """
+)
+                        
+    
+}
+              
 }
         
 
 
+// @LINE:20
 // @LINE:16
 // @LINE:15
 // @LINE:13
@@ -249,6 +283,19 @@ def filter(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
 // @LINE:7
 def login(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Application.login(), HandlerDef(this, "controllers.Application", "login", Seq(), "GET", """""", _prefix + """""")
+)
+                      
+    
+}
+                          
+
+// @LINE:20
+class ReverseAssets {
+    
+
+// @LINE:20
+def at(path:String, file:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Assets.at(path, file), HandlerDef(this, "controllers.Assets", "at", Seq(classOf[String], classOf[String]), "GET", """ Map static resources from the /public folder to the /assets URL path""", _prefix + """assets/$file<.+>""")
 )
                       
     

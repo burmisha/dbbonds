@@ -1,6 +1,6 @@
 // @SOURCE:D:/github/dbbonds/conf/routes
-// @HASH:9ea884e1794f41b47a57734307d0d85b4e9de6cf
-// @DATE:Wed Aug 28 12:08:18 BST 2013
+// @HASH:36715262aa3a17a455430174a57f121c56dda168
+// @DATE:Wed Aug 28 14:34:07 BST 2013
 
 
 import play.core._
@@ -55,7 +55,11 @@ private[this] lazy val controllers_Application_search5 = Route("GET", PathPatter
 // @LINE:16
 private[this] lazy val controllers_Application_filter6 = Route("POST", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("search"))))
         
-def documentation = List(("""GET""", prefix,"""controllers.Application.login()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """login""","""controllers.Application.login()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """login""","""controllers.Application.authenticate()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """clients""","""controllers.Clients.list()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """client/$id<[^/]+>""","""controllers.Clients.one(id:Int)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """search""","""controllers.Application.search()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """search""","""controllers.Application.filter()""")).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
+
+// @LINE:20
+private[this] lazy val controllers_Assets_at7 = Route("GET", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("assets/"),DynamicPart("file", """.+""",false))))
+        
+def documentation = List(("""GET""", prefix,"""controllers.Application.login()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """login""","""controllers.Application.login()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """login""","""controllers.Application.authenticate()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """clients""","""controllers.Clients.list()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """client/$id<[^/]+>""","""controllers.Clients.one(id:Int)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """search""","""controllers.Application.search()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """search""","""controllers.Application.filter()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """assets/$file<.+>""","""controllers.Assets.at(path:String = "/public", file:String)""")).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
   case r @ (_,_,_) => s :+ r.asInstanceOf[(String,String,String)]
   case l => s ++ l.asInstanceOf[List[(String,String,String)]] 
 }}
@@ -115,6 +119,14 @@ case controllers_Application_search5(params) => {
 case controllers_Application_filter6(params) => {
    call { 
         invokeHandler(controllers.Application.filter(), HandlerDef(this, "controllers.Application", "filter", Nil,"POST", """""", Routes.prefix + """search"""))
+   }
+}
+        
+
+// @LINE:20
+case controllers_Assets_at7(params) => {
+   call(Param[String]("path", Right("/public")), params.fromPath[String]("file", None)) { (path, file) =>
+        invokeHandler(controllers.Assets.at(path, file), HandlerDef(this, "controllers.Assets", "at", Seq(classOf[String], classOf[String]),"GET", """ Map static resources from the /public folder to the /assets URL path""", Routes.prefix + """assets/$file<.+>"""))
    }
 }
         
