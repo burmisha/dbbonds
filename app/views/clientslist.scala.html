@@ -1,10 +1,34 @@
 @(currentPage: List[Client])
-	<table>
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width; initial-scale=1.0">
+	<title>DBBonds → Clients</title>
+	<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/main.css")"> 
+	<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+</head>
+
+<body>
+<table class="table table-striped table-hover table-condensed" >
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>ID</th>
+				<th>Balance</th>
+			</tr>
+		</thead>	
 		<tbody>
 			@for(client <- currentPage) {
 				<tr>
 				<td><a href="@routes.Clients.one(client.getId())">@client.getName()</a></td>
+				<td>@client.getId()</td>
+				<td>@client.getBalance()</td>
 				</tr>
 			}
 		</tbody>
 	</table>
+
+</body>
+</html>
