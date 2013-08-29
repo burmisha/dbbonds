@@ -68,10 +68,25 @@ img.dblogo {
 	/*clear:both;*/
 }
 
+img.dbheader {
+	height: 30pt;
+	padding-top: 7pt;
+	padding-left: 7pt;
+}
+
 div.search {
 	width: auto;
 	max-width: 400pt;
-	position: absolute;
+	position: relative;
+	width:	40%;
+	top: 	15%;
+	left: 	30%
+}
+
+div.buybond {
+	width: auto;
+	max-width: 400pt;
+	position: relative;
 	width:	40%;
 	top: 	15%;
 	left: 	30%

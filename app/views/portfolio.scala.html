@@ -10,6 +10,24 @@
 </head>
 
 <body>
+
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="navbar-header">
+		<ul class="nav navbar-nav">
+				<li><img src="@routes.Assets.at("images/db_square.png")" class="dbheader"></li>
+				<li><a class="navbar-brand" href="@routes.Clients.list()" class="active">Clients</a></li>
+			</ul> 
+		</div>
+		<div>
+			<ul class="nav navbar-nav">
+				<li><a href="@routes.Application.search()">Search</a></li>
+			</ul> 
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="@routes.Application.login()">Logout</a></li> 
+			</ul>
+		</div>
+	</nav>
+
 <table  class="table table-striped table-hover table-condensed" >
 	<thead>
 		<tr>
@@ -19,9 +37,7 @@
 			<th>Price</th>
 			<th>Coupon</th>
 			<th>Current Yield</th>
-			<th>Quantity</th>
-			<th>Moody's Rating</th>
-			<th>S&P Rating</th>
+			<th>Avaliable</th>
 			<th>Issuer</th>
 			<th>Quantity</th>
 		</tr>
@@ -36,8 +52,6 @@
 			<td>@bond.getCoupon()</td>
 			<td>@bond.getCurrentYield()</td>
 			<td>@bond.getQuantity()</td>
-			<td>@bond.getIdMoodysRating()</td>
-			<td>@bond.getidSpRating()</td>
 			<td>@bond.getIssuer()</td>
 			<td>@quantity</td>
 			<td>

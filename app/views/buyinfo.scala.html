@@ -10,22 +10,42 @@
 	<link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
 </head>
 <body>
+
+<nav class="navbar navbar-default" role="navigation">
+		<div class="navbar-header">
+		<ul class="nav navbar-nav">
+				<li><img src="@routes.Assets.at("images/db_square.png")" class="dbheader"></li>
+				<li><a class="navbar-brand" href="@routes.Clients.list()" class="active">Clients</a></li>
+			</ul> 
+		</div>
+		<div>
+			<ul class="nav navbar-nav">
+				<li><a href="@routes.Application.search()">Search</a></li>
+			</ul> 
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="@routes.Application.login()">Logout</a></li> 
+			</ul>
+		</div>
+	</nav>
+
+<div class="buybond">
 	<table class="table">
 		<tbody>
-		<tr><td>CUSIP:</td>	<td>@bond.getCusip()</td></tr>
-		<tr><td>Name:</td>	<td>@bond.getName()</td></tr>
+		<tr><td>CUSIP:</td>		<td>@bond.getCusip()</td></tr>
+		<tr><td>Name:</td>		<td>@bond.getName()</td></tr>
 		<tr><td>Par Value:</td>	<td>@bond.getParValue()</td></tr>
 		</tbody>
-	<table>
+	</table>
 
 	@helper.form(routes.Application.buy(clientId, cusip)) {
 		<p>
-			Amount: <input type = "text" name="amount" default="0">
+			<input type = "text" name="amount" default="0" class="form-control" placeholder="Amount">
 		</p>
-		<p align="right">
-			<button name = "search" type="submit">Buy bonds</button>
+		<p>
+			<button name = "search" type="submit" class="btn btn-lg btn-primary btn-block">Buy bonds</button>
 		</p>
 	}
+</div>
 </body>
 </html>
 	

@@ -30,9 +30,6 @@ public class Bond extends Model{
 	private ArrayList<Date> couponPaymentDates;
 	private String issuer;
 	
-	
-	
-	
 	public Bond(String cusip, double parValue, double price, String name, 
 			double coupon, double currentYield, double maturityYield,
 			int quantity, int idSpRating, int idMoodysRating, Date maturityDate,
