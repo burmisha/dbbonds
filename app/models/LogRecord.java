@@ -7,11 +7,7 @@ import play.db.ebean.*;
 import play.data.format.*;
 import play.data.validation.*;
 
-import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import com.sun.jmx.snmp.Timestamp;
 
 public class LogRecord extends Model{
 	
@@ -22,6 +18,18 @@ public class LogRecord extends Model{
 	double price;
 	String type;
 	int quantity;
+	
+	public LogRecord(){
+		
+		portfolioID = 0;
+		traderID = 0;
+		tmsp = new java.sql.Timestamp(new Date().getTime());
+		cusip = "";
+		price = 0;
+		this.type = "";
+		this.quantity = 0;
+		
+	}
 	
 	public LogRecord(Portfolio portfolio, Trader trader, Bond bond, int quantity, String type){
 	

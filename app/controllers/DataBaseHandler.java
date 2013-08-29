@@ -319,6 +319,7 @@ public Map<Integer, String> getSpRating(){
 				bond.setCusip(cusip);
 				bond.setPrice(rs.getDouble("price"));
 				bond.setName(rs.getString("name"));
+				bond.setParValue(rs.getDouble("parvalue"));
 				bond.setCoupon(rs.getDouble("coupon"));
 				bond.setCurrentYield(rs.getDouble("currentyield"));
 				bond.setMaturityYield(rs.getDouble("maturityyield"));

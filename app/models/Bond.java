@@ -15,24 +15,6 @@ import java.util.ArrayList;
 @Entity 
 public class Bond extends Model{
 	
-	// public enum moodysRatingE{
-	// 	AAA, 
-	// 	Aa1, 	Aa2,	Aa3,
-	// 	A1,		A2,		A3,
-	// 	Baa1,	Baa2,	Baa3,
-	// 	Ba1,	Ba2,	Ba3,
-	// 	B1,		B2,		B3,
-	// 	Caa1,	Caa2,	Ca,
-	// 	C,	NONE		
-	// }
-	
-	// public enum spRatingE{
-	// 	AAA,
-	// 	AAp,	AA,		AAm,
-	// 	Ap,		A,		Am,
-	// 	BBBp,	BBB,	BBBm,
-	// }
-	
 	private String cusip;
 	private double parValue;
 	private double price;
