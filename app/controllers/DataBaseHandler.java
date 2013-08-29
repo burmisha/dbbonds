@@ -651,9 +651,9 @@ public boolean writeLog(LogRecord logrecord){
 				
 				clientPstmt.executeUpdate();
 				
-				// LogRecord log = new LogRecord(portfolio, trader, bond, amount, "buy");
+				LogRecord log = new LogRecord(portfolio, trader, bond, amount, "buy");
 				
-				// writeLog(log);
+				writeLog(log);
 				
 				conn.commit();
 				
@@ -690,9 +690,9 @@ public boolean writeLog(LogRecord logrecord){
 				
 				clientPstmt.executeUpdate();
 				
-				// LogRecord log = new LogRecord(portfolio, trader, bond, amount, "buy");
+				LogRecord log = new LogRecord(portfolio, trader, bond, amount, "buy");
 				
-				// writeLog(log);
+				writeLog(log);
 				
 				conn.commit();
 				
